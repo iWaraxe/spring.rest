@@ -37,4 +37,12 @@ public class MyRESTController {
         employeeService.saveEmployee(employee);
         return employee;
     }
+
+    @DeleteMapping("/employees/{id}")
+    public String deleteEmployee(@PathVariable Integer id) {
+
+
+        employeeService.deleteEmployee(id);
+        return "Employee with ID = " + id + " was deleted successfully";
+    }
 }
