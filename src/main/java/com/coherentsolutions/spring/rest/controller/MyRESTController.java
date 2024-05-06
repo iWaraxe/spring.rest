@@ -1,8 +1,13 @@
 package com.coherentsolutions.spring.rest.controller;
 
 import com.coherentsolutions.spring.rest.entity.Employee;
+import com.coherentsolutions.spring.rest.exceptions.EmployeeIncorrectData;
+import com.coherentsolutions.spring.rest.exceptions.NuSuchEmployeeException;
 import com.coherentsolutions.spring.rest.service.EmployeeService;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,8 +26,11 @@ public class MyRESTController {
     }
 
     @GetMapping("/employees/{id}")
-    public Employee getEmployee(@PathVariable Integer id) {
+    public Employee getEmployee(@PathVariable Integer id) throws NotFoundException {
         Employee employee = employeeService.getEmployeeById(id);
+        if (employee == null) {
+            throw new NotFoundException("Employee with id " + id + " not found in the database");
+        }
         return employee;
     }
 
@@ -39,12 +47,26 @@ public class MyRESTController {
     }
 
     @DeleteMapping("/employees/{id}")
-    public String deleteEmployee(@PathVariable Integer id) {
+    public String deleteEmployee(@PathVariable Integer id) throws NotFoundException {
         Employee employee = employeeService.getEmployeeById(id);
         if(employee == null) {
-            throw new IllegalArgumentException("There's no employee with ID = " + id + " in the Database.");
+            throw new NotFoundException("Employee with id " + id + " not found in the database");
         }
         employeeService.deleteEmployee(id);
         return "Employee with ID = " + id + " was deleted successfully";
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<EmployeeIncorrectData> handleException(NuSuchEmployeeException exception) {
+        EmployeeIncorrectData data = new EmployeeIncorrectData();
+        data.setMessage(exception.getMessage());
+        return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<EmployeeIncorrectData> handleException(Exception exception) {
+        EmployeeIncorrectData data = new EmployeeIncorrectData();
+        data.setMessage(exception.getMessage());
+        return new ResponseEntity<>(data, HttpStatus.BAD_REQUEST);
     }
 }
