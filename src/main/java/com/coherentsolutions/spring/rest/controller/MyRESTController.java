@@ -40,8 +40,10 @@ public class MyRESTController {
 
     @DeleteMapping("/employees/{id}")
     public String deleteEmployee(@PathVariable Integer id) {
-
-
+        Employee employee = employeeService.getEmployeeById(id);
+        if(employee == null) {
+            throw new IllegalArgumentException("There's no employee with ID = " + id + " in the Database.");
+        }
         employeeService.deleteEmployee(id);
         return "Employee with ID = " + id + " was deleted successfully";
     }
