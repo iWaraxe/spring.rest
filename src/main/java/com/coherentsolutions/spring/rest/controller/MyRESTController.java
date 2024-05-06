@@ -55,18 +55,4 @@ public class MyRESTController {
         employeeService.deleteEmployee(id);
         return "Employee with ID = " + id + " was deleted successfully";
     }
-
-    @ExceptionHandler
-    public ResponseEntity<EmployeeIncorrectData> handleException(NuSuchEmployeeException exception) {
-        EmployeeIncorrectData data = new EmployeeIncorrectData();
-        data.setMessage(exception.getMessage());
-        return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<EmployeeIncorrectData> handleException(Exception exception) {
-        EmployeeIncorrectData data = new EmployeeIncorrectData();
-        data.setMessage(exception.getMessage());
-        return new ResponseEntity<>(data, HttpStatus.BAD_REQUEST);
-    }
 }
