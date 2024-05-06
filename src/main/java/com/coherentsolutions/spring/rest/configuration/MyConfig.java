@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import javax.sql.DataSource;
-import javax.xml.crypto.Data;
 import java.beans.PropertyVetoException;
 import java.util.Properties;
 
@@ -25,7 +24,7 @@ public class MyConfig {
         ComboPooledDataSource dataSource = new ComboPooledDataSource();
         try {
             dataSource.setDriverClass("com.mysql.cj.jdbc.Driver");
-            dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/hibernate_db?useSSL=false&amp;serverTimezone=UTC&amp;allowPublicKeyRetrieval=true");
+            dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/hibernate_db?useSSL=false&serverTimezone=UTC");
             dataSource.setUser("bestuser");
             dataSource.setPassword("bestuser");
         } catch (PropertyVetoException e) {
