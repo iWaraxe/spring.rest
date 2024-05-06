@@ -3,10 +3,7 @@ package com.coherentsolutions.spring.rest.controller;
 import com.coherentsolutions.spring.rest.entity.Employee;
 import com.coherentsolutions.spring.rest.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,9 +20,15 @@ public class MyRESTController {
         return allEmployees;
     }
 
-    @GetMapping("employees/{id}")
+    @GetMapping("/employees/{id}")
     public Employee getEmployee(@PathVariable Integer id) {
         Employee employee = employeeService.getEmployeeById(id);
+        return employee;
+    }
+
+    @PostMapping("/employees")
+    public Employee addNewEmployee(@RequestBody Employee employee) {
+        employeeService.saveEmployee(employee);
         return employee;
     }
 }
